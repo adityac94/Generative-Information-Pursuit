@@ -1,4 +1,4 @@
-name: base
+name: generative_ip
 channels:
   - conda-forge
   - defaults
