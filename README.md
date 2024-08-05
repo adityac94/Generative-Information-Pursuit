@@ -8,7 +8,7 @@ Official code to accompany the paper [Interpretable by design: Learning predicto
 
 ## Overview
 <p align="center">
-<img src="./assets/VIP-illustration.png" alt="teaser.png" width="500"/>
+<img src="./assets/IP-illustration.png" alt="teaser.png" width="500"/>
 </p>
 
 There is a growing concern about typically opaque decision-making with high-performance machine learning algorithms. Providing an explanation of the reasoning process in domain-specific terms can be crucial for adoption in risk-sensitive domains such as healthcare. We argue that machine learning algorithms should be interpretable by design and that the language in which these interpretations are expressed should be domain- and task-dependent. Consequently, we base our model's prediction on a family of user-defined and task-specific binary functions of the data, each having a clear interpretation to the end-user. We then minimize the expected number of queries needed for accurate prediction on any given input. As the solution is generally intractable, following prior work, we choose the queries sequentially based on information gain. However, in contrast to previous work, we need not assume the queries are conditionally independent. Instead, we leverage a stochastic generative model (VAE) and an MCMC algorithm (Unadjusted Langevin) to select the most informative query about the input based on previous query-answers. This enables the online determination of a query chain of whatever depth is required to resolve prediction ambiguities. Finally, experiments on vision and NLP tasks demonstrate the efficacy of our approach and its superiority over post-hoc explanations.
@@ -25,19 +25,19 @@ Once this command has finished, you can activate the environment with `conda act
 We also use `wandb` to moderate training and testing performance. One may remove lines related to `wandb` and switch to other packages if they desire. 
 
 ## Datasets
-This code supports 5 datasets: Cifar10, Cifar100, CUB-200, Places365 and Imagenet.
+This code supports 5 datasets: mnist, kmnist, fashion_mnist, caltech_silhouttes, cub
 
-For CUB-200, please download the dataset from https://www.vision.caltech.edu/datasets/cub_200_2011/. Remember to save the dataset at "./data/CUB/", with the image directory being located at "./data/CUB/CUB_200_2011".
-
-For Imagenet, refer to instructions at https://www.image-net.org/download.php. Remember to save the dataset at "./data/ImageNet".
+For CUB-200 (cub), please download the dataset from https://www.vision.caltech.edu/datasets/cub_200_2011/. Remember to save the dataset at "./data/CUB/", with the image directory being located at "./data/CUB/CUB_200_2011".
 
 ## Code
-For all code, we use argparse to take in arguments, use the '-h' flag to see description of arguments. For example, for code "train_concept_qa.py", typing "train_concept_qa.py -h" would display the list of arguments the code takes. Following are list of relevant codes.
+Following are list of relevant codes.
 
-1. **preprocess.py**: code to convert images from the Imagenet and Places365 datasets into their respective clip embeddings and save them as new datasets of (clip embedding, label) pairs. This is done to speed up the training on Concept-QA and V-IP networks since these are very large datasets. Run this file before running the below two codes for training the Concept-QA and V-IP networks respectively.
-2. **train_concept_qa.py**: code to train the Concept-QA network. 
-3. **train_vip.py**: code to train the V-IP network using the trained Concept-QA network (using the previous code). In this code, please change the filenames for the saved Concept-QA network file accordingly in the "get_answering_model()" function.
-4. **VIP_visualizations.ipynb**: Code to visualize the interpretable prediction results by V-IP using the Concept-QA model. This code uses the saved models (used for generating results in our paper). If you train your own models using the above codes, remember to change the filenames accordingly, in the "get_pretrained_actor_classifier_filenames" function in utils.py and the "get_answering_model()" function in train_vip.py.
+1. **train.py**: code to train the VAE generative model for learning the distribution between the query answers and labels. Usage:
+   python train.py <dataset_name> 
+2. **run_ip.py**: code to run the IP algorithm using the trained VAE generative model. Usage:
+   python run_ip.py
+
+   Here the dataset_name is an argument in the code that needs to be changed 
 
 ## License
 This project is under the MIT License. See [LICENSE](./LISENSE.md) for details.
